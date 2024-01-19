@@ -1,3 +1,3 @@
-console.log('안녕 자바스크립트');
+alert('안돼!');
 
-const a = 10;
+confirm('이 페이지를 나가시겠습니까?');
