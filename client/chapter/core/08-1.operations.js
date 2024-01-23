@@ -120,3 +120,4 @@ let total = (count % 4) * (count /= 2) + count ** 3; // ?
 // count = count / 2;
 // let pow = count ** 3;
 // total = total + count + pow;
+
