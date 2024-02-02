@@ -204,13 +204,87 @@ function movePage(url,success,fail){
     }
   )
 
-
+console.clear();
 
 // 함수 선언문 vs. 함수 (표현)식
 
 
 // 즉시 실행 함수 (표현)식
 // Immediately Invoked Function Expression
-let IIFE;
+// IIFE
+// 캡슐화 (incapsulation)
+// 함수가 선언됨과 동시에 실행되는 것을 말합니다.
+// rename 가능 => closure
+// import export => module 프로그래밍 (use strict)
 
+const MASTER = (function(g){ // window를 g로 rename함
+
+    let uuid = 'asdsafsafdsfsdFd';
+
+    return {
+        getKey(){
+            return uuid;
+        },
+        setKey(value){
+            uuid = value;
+        }
+    }
+
+
+})(window);
+
+console.log(MASTER.getKey());
+
+
+// 개발 팀장: 박가희
+// : getStyle, setStyle, css, 이거 만들었으니까 가져다 쓰세요. 근데.. get, set 함수는 쓰지 말고 css 함수만 사용하셔도 됩니다.
+
+// 개발 인턴: 박지성
+// : getStyle() 작동은 잘함, 컨벤션 깨짐
+
+// 이걸 막기 위해서
+// - import export 하는 방법
+// import { css } from "../../utils/css.js";
+
+// css()
+
+
+//  - IIFE 방법
+const css = (function(){
+  
+  function getStyle(node,prop){
+
+    if(typeof node === 'string'){
+      node = document.querySelector(node)
+    }
+    if(typeof prop !== 'string'){
+      throw new Error('getStyle 함수의 두 번째 인수는 문자 타입 이어야 합니다.');
+    }
+    return getComputedStyle(node)[prop]
+  }
+ 
+  function setStyle(node,prop,value){
+  
+    if(typeof node === 'string') node = document.querySelector(node);
+  
+    if(typeof prop !== 'string'){
+      throw new Error('setStyle 함수의 두 번째 인수는 문자 타입 이어야 합니다.');
+    }
+  
+    if(!value) throw new Error('setStyle 함수의 세 번째 인수는 필수 입력값 입니다.');
+  
+    node.style[prop] = value
+  }
+  
+  function css(node,prop,value){
+
+    return (!value) ? getStyle(node,prop) : setStyle(node,prop,value)
+    
+    
+  }
+  
+
+  return css;
+
+})()
 
