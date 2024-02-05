@@ -5,6 +5,15 @@ module.exports = {
         "node": true
     },
     "extends": "eslint:recommended",
+    "glovals": {
+        "getNode": true,
+        "getNodes": true,
+        "attr": true,
+        "insertLast": true,
+        "getCss": true,
+        "setCss": true,
+        "css": true,
+    },
     "overrides": [
         {
             "env": {
