@@ -35,7 +35,7 @@ document.body.append(div);
 
 // - parent.appendChild(node)
 // - parent.insertBefore(node, nextSibling)
-// - parent.removeChild(node)
+// - parent.removeChild(node)∏
 // - parent.replaceChild(newElement, node)
 
 
