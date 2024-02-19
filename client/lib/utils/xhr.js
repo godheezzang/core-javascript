@@ -115,56 +115,112 @@ xhr.delete = (url,onSuccess,onFail)=>{
 }
 
 
+// xhr.post(END_POINT, {name: 'tiger'}, (data)=>{console.log(data)},()=>{})
+
+
 
 
 // xhr.delete()
 
 
-/* -------------------------------------------------------------------------- */
-/*                                 xhr.Promise                                */
-/* -------------------------------------------------------------------------- */
+/* --------------------------------------------------- */
+/*                                 xhr Promise                                */
+/* --------------------------------------------------- */
+
+const defaultOptions = {
+  method: 'GET',
+  url: '',
+  body: null,
+  errorMessage: '서버와의 통신이 원활하지 않습니다.',
+  headers: {
+    'Contents-Type': 'application/json',
+    'Access-Control-Allow-Origin': '*'
+  }
+}
 
 
+export function xhrPromise(options) {
+  // mixin
 
-function xhrPromise(method,url,body){
-
-
+  const { method, url, body, errorMessage, headers } = {
+    ...defaultOptions,
+    ...options,
+    headers: { ...defaultOptions.headers, ...options.headers },
+  };
 
   const xhr = new XMLHttpRequest();
 
-  xhr.open(method,url);
+  xhr.open(method, url);
 
-  xhr.send(JSON.stringify(body)); // 이게 밑에 가있으면 안댐
+  Object.entries(headers).forEach(([key,value])=>{
+    xhr.setRequestHeader(key,value);
+  })
 
+  xhr.send(JSON.stringify(body));
 
-  return new Promise((resolve, reject)=>{
-
-    xhr.addEventListener('readystatechange',()=>{
-
-      if(xhr.readyState === 4){
-
-        if(xhr.status >= 200 && xhr.status < 400){
-
-          resolve(JSON.parse(xhr.response))
-
-        }else {
-
+  return new Promise((resolve, reject) => {
+    xhr.addEventListener("readystatechange", () => {
+      if (xhr.readyState === 4) {
+        if (xhr.status >= 200 && xhr.status < 400) {
+          resolve(JSON.parse(xhr.response));
+        } else {
+          reject({ message: "알 수 없는 오류가 발생했습니다!" });
           // error
         }
       }
-    })
+    });
+  });
+}
+
+
+
+// xhrPromise({
+//   method: 'GET',
+//   url: END_POINT
+// })
+// .then((res)=>{
+//   console.log(res);
+// })
+// .catch((err)=>{
+//   err.message
+// })
+
+
+
+
+
+// xhrPromise는 프라미스 객체를 내뱉지만 get메서드는 내뱉지 못하기 때문에 꼭 리턴 필요
+xhrPromise.get = (url) => {
+  return xhrPromise({url})
+}
+
+
+xhrPromise.post = (url, body) => {
+  return xhrPromise({
+    method: 'POST',
+    url,
+    body})
+}
+
+
+xhrPromise.delete = (url) => {
+  return xhrPromise({
+    method: 'DELETE',
+    url,
   })
 }
 
 
 
-xhrPromise('GET',END_POINT)
-.then((res)=>{
-  console.log(res);
-})
-.catch((err)=>{
-  err.message
-})
+// xhrPromise.get();
+// xhrPromise.post();
+// xhrPromise.put();
+
+
+// xhrPromise.post(END_POINT,{name: 'tiger'})
+//   .then(console.log)
+//   .catch(console.log)
+
 
 
 
